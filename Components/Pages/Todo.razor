@@ -1,0 +1,40 @@
+@page "/todolist"
+@rendermode InteractiveServer
+
+<PageTitle>To Do List</PageTitle>
+<h1>To Do List (@(@toDos.Count(toDo => toDo.IsDone)) / @(toDos.Count()))</h1>
+<p>test</p>
+@code {
+    //Create list of to do items
+    private List<ToDoItem> toDos = new List<ToDoItem>();
+    //Declare new to do item name
+    string newToDo = "";
+    
+    //Add new to do item to the list
+    void addToDo(){
+        if (!string.IsNullOrWhiteSpace(newToDo)){
+            toDos.Add(new ToDoItem {Title = newToDo});
+            newToDo = string.Empty;
+        }
+    }
+    void removeToDo(ToDoItem toDoToRemove){
+        toDos.Remove(toDoToRemove);
+    }
+}
+
+
+<input @bind = "newToDo"/>
+<button @onclick="addToDo">Add To Do</button>
+
+
+
+<ul>
+    @foreach(ToDoItem toDoInTable in toDos){
+        <li>
+            @* @toDo.Title *@
+            <input type = "checkbox" @bind = "toDoInTable.IsDone"/>
+            <input @bind = "toDoInTable.Title"/>
+            <button @onclick="() => removeToDo(toDoInTable)">Remove</button>
+        </li>
+    }
+</ul>
